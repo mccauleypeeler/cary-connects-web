@@ -14,32 +14,38 @@ class NavigationMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filteredLocation: []
+      filteredLocation: filterLocation("", 0),
     };
-  }
-
-  componentDidMount() {
-    filterLocation("", 0).then(filteredLocation => this.setState({ filteredLocation }));
   }
 
   handleSearchChange = event => {
     if (event.target.value == 0) {
-      filterLocation(event.target.value, 0).then(filteredLocation => this.setState({ filteredLocation }));
-    } else {
-      filterLocation(event.target.value, 9).then(filteredLocation => this.setState({ filteredLocation }));
-    }
-  };
+      this.setState({
+      filteredLocation: filterLocation(event.target.value, 0)
+    });
+  } else {
+    this.setState({
+      filteredLocation: filterLocation(event.target.value, 7, this.props.data)
+    });
+  }};
+
+  settleName(name) {
+      this.props.thirdNamePass(name);
+      this.setState({
+        filteredLocation: filterLocation("", 0)
+      });
+  }
 
   render () {
     return (
       <div>
-        <Grid container className="nav" spacing={16}>
+
           <NavigationItem title='Home' navigatesTo={PageDirectory.WELCOME_PAGE.path} />
           <NavigationItem title='Feedback' navigatesTo={PageDirectory.FEEDBACK_PAGE.path} />
-        </Grid>
+
 
         <SearchInput textChange={this.handleSearchChange} />
-        <LocationResults locationData={this.state.filteredLocation} />
+        <LocationResults locationData={this.state.filteredLocation} secondPassName={this.settleName.bind(this)}/>
       </div>
     )
   }

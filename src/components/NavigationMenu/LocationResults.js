@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import capitalize from "capitalize";
 
 import LocationResultRow from "./LocationResultRow";
 
 class LocationResults extends Component {
+  showName(name) {
+    this.props.secondPassName(name);
+  }
 
   render() {
     return (
@@ -12,7 +14,8 @@ class LocationResults extends Component {
         {this.props.locationData.map(locationData => (
           <LocationResultRow
             name={locationData.properties.name}
-            marker-symbol={capitalize(locationData.properties["marker-symbol"])}
+            amenity={locationData.properties["marker-symbol"]}
+            passName={this.showName.bind(this)}
           />
         ))}
       </div>
